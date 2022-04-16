@@ -2,6 +2,8 @@ package com.reviewservice.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +28,7 @@ public class UserManagementController {
 	}
 
 	@PostMapping("/createUser")
-	public User createUser(@RequestBody User user) throws PersistenceServiceException {
+	public User createUser(@RequestBody @Valid User user) throws PersistenceServiceException {
 		return userPersistenceService.createUser(user);
 	}
 

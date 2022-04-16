@@ -1,13 +1,20 @@
 package com.reviewservice.businees.objects;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class User {
     
     private String id;
 
+    @NotBlank(message = "name can not be null")
     private String name;
-
+    
+    @NotBlank(message = "email can not be null")
+    @Email
     private String email;
 
+    @NotBlank(message = "Password can not be null")
     private String password;
 
     public User() {

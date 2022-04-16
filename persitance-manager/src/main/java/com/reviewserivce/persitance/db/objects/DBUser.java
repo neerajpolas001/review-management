@@ -1,5 +1,6 @@
 package com.reviewserivce.persitance.db.objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,10 +14,13 @@ public class DBUser {
     @Id
     private String id;
     
+    @Column(nullable = false, length = 100)
     private String name;
     
+    @Column(nullable = false, length = 100)
     private String email;
     
+    @Column(nullable = false, length = 255)
     private String password;
 
     public DBUser() {

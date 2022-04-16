@@ -19,36 +19,41 @@ import com.reviewservice.utils.StringUtils;
 @Service
 public class UserPersistenceService {
 
-    @Autowired
-    private UserRepository repository;
+	@Autowired
+	private UserRepository repository;
 
-    public List<User> getAllUsers() {
-	List<DBUser> dbUsers = repository.findAll();
-	List<User> users = new ArrayList<>();
-	for (DBUser dbUser : dbUsers) {
-	    users.add(UserAdapter.convertToUser(dbUser));
+	public List<User> getAllUsers() {
+		List<DBUser> dbUsers = repository.findAll();
+		List<User> users = new ArrayList<>();
+		for (DBUser dbUser : dbUsers) {
+			users.add(UserAdapter.convertToUser(dbUser));
+		}
+		// dbUsers.stream().forEach(dbUser ->
+		// users.add(UserAdapter.convertToUser(dbUser)));
+		// dbUsers.stream().map(dbUser ->
+		// UserAdapter.convertToUser(dbUser)).collect(Collectors.toList());
+		// return repository.findAll().stream().map(dbUser ->
+		// UserAdapter.convertToUser(dbUser)).collect(Collectors.toList());
+		return users;
 	}
-	// dbUsers.stream().forEach(dbUser ->
-	// users.add(UserAdapter.convertToUser(dbUser)));
-	// dbUsers.stream().map(dbUser ->
-	// UserAdapter.convertToUser(dbUser)).collect(Collectors.toList());
-	// return repository.findAll().stream().map(dbUser ->
-	// UserAdapter.convertToUser(dbUser)).collect(Collectors.toList());
-	return users;
-    }
 
-    public User createUser(User user) throws PersistenceServiceException {
-    	if(StringUtils.isEmpty(user.getEmail()))
-    	    throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Email for user can not be empty");
-    	List<DBUser> dbUsers = repository.findByEmail(user.getEmail());
-    	if(!CollectionUtils.isEmpty(dbUsers))
-    	    throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Email already exists");
-    	user.setId(UID.getUUID());
-    	DBUser dbUser = repository.save(UserAdapter.convertToDBUser(user));
-    	if(dbUser != null)
-    	    return user;
-    	else
-    	    return null;
-    }
+	public User createUser(User user) throws PersistenceServiceException {
+		if (StringUtils.isEmpty(user.getEmail()))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Email for user can not be empty");
+		List<DBUser> dbUsers = repository.findByEmail(user.getEmail());
+		if (!CollectionUtils.isEmpty(dbUsers))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Email already exists");
+		user.setId(UID.getUUID());
+		try {
+			DBUser dbUser = repository.save(UserAdapter.convertToDBUser(user));
+			if (dbUser != null)
+				return user;
+			else
+				return null;
+		} catch (Exception e) {
+			throw new PersistenceServiceException(e.getMessage(), e);
+		}
+
+	}
 
 }
