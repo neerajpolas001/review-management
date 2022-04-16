@@ -1,4 +1,4 @@
-package com.restservice;
+package com.reviewservice.controller;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

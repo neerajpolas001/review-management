@@ -1,4 +1,4 @@
-package com.restservice;
+package com.reviewservice.controller;
 
 public class Greetings {
 

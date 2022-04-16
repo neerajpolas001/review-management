@@ -2,8 +2,6 @@ package com.reviewserivce.persitance.uuid;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public class UID {
 
 //    @Value("${UUID.key}")

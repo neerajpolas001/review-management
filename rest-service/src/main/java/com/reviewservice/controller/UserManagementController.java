@@ -1,4 +1,4 @@
-package com.restservice;
+package com.reviewservice.controller;
 
 import java.util.List;
 
@@ -10,24 +10,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reviewservice.businees.objects.User;
+import com.reviewservice.exceptions.PersistenceServiceException;
 import com.reviewservice.persistence.service.UserPersistenceService;
 
 @RestController
 @RequestMapping("userService")
-public class UserManagementService {
+public class UserManagementController {
 
-    @Autowired
-    private UserPersistenceService userPersistenceService;
+	@Autowired
+	private UserPersistenceService userPersistenceService;
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-	return userPersistenceService.getAllUsers();
-    }
+	@GetMapping("/users")
+	public List<User> getAllUsers() {
+		return userPersistenceService.getAllUsers();
+	}
 
-    @PostMapping("/createUser")
-    public User createUser(@RequestBody User user) {
-	return userPersistenceService.createUser(user);
-    }
-    
+	@PostMapping("/createUser")
+	public User createUser(@RequestBody User user) throws PersistenceServiceException {
+		return userPersistenceService.createUser(user);
+	}
 
 }

@@ -1,4 +1,4 @@
-package com.restservice;
+package com.reviewservice.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
