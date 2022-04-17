@@ -7,11 +7,11 @@ public class UserAdapter {
 
     public static User convertToUser(DBUser dbUser) {
 	// TODO - Password decryption
-	return new User(dbUser.getId(), dbUser.getName(), dbUser.getEmail(), dbUser.getPassword());
+	return new User(dbUser.getId(), dbUser.getName(), dbUser.getUserName(), dbUser.getEmail(), dbUser.getPassword());
     }
 
     public static DBUser convertToDBUser(User user) {
 	// TODO - Password encryption
-	return new DBUser(user.getId(), user.getName(), user.getEmail(), user.getPassword());
+	return new DBUser(user.getId(), user.getName(), user.getUserName(),user.getEmail(), user.getPassword());
     }
 }

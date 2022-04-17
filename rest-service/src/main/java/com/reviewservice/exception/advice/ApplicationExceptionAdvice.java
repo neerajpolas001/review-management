@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.reviewservice.exceptions.ErrorCode;
 import com.reviewservice.exceptions.PersistenceServiceException;
+import com.reviewservice.rest.exceptions.UserServiceException;
 
 @RestControllerAdvice
 public class ApplicationExceptionAdvice {
@@ -22,7 +23,10 @@ public class ApplicationExceptionAdvice {
 	public ResponseEntity<Map<String, String>> handlePersistenceServiceException(PersistenceServiceException e) {
 		logger.error(e.getMessage(), e);
 		Map<String, String> map = new HashMap<>();
-		map.put("Message", e.getMessage());
+		if(e.getErrorCode() == ErrorCode.INTERNAL_SERVER_ERROR)
+			map.put("Message", "Internal state error");
+		else
+			map.put("Message", e.getMessage());
 		map.put("ErrorCode", e.getErrorCode().toString());
 		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
 	}
@@ -35,4 +39,16 @@ public class ApplicationExceptionAdvice {
 		map.put("errorCode", ErrorCode.BAD_REQUEST.getCode() + "");
 		return ResponseEntity.status(ErrorCode.BAD_REQUEST.getCode()).body(map);
 	}
+	
+	
+	@ExceptionHandler(UserServiceException.class)
+	public ResponseEntity<Map<String, String>> handlePersistenceServiceException(UserServiceException e) {
+		logger.error(e.getMessage(), e);
+		Map<String, String> map = new HashMap<>();
+		map.put("Message", e.getMessage());
+		map.put("ErrorCode", e.getErrorCode().toString());
+		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
+	}
+	
+	
 }

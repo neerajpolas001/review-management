@@ -1,122 +1,106 @@
 package com.reviewserivce.persitance.db.objects;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-
 @Entity
 @Table(name = "user")
 public class DBUser {
-    
-    @Id
-    private String id;
-    
-    @Column(nullable = false, length = 100)
-    private String name;
-    
-    @Column(nullable = false, length = 100)
-    private String email;
-    
-    @Column(nullable = false, length = 255)
-    private String password;
 
-    public DBUser() {
-	super();
-	// TODO Auto-generated constructor stub
-    }
+	@Id
+	private String id;
 
-    public DBUser(String id, String name, String email, String password) {
-	super();
-	this.id = id;
-	this.name = name;
-	this.email = email;
-	this.password = password;
-    }
+	@Column(nullable = false, length = 100)
+	private String name;
 
-    public String getId() {
-        return id;
-    }
+	@Column(name = "username", nullable = false, unique = true, length = 100)
+	private String userName;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	@Column(nullable = false, length = 100)
+	private String email;
 
-    public String getName() {
-        return name;
-    }
+	@Column(nullable = false, length = 255)
+	private String password;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public DBUser() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public DBUser(String id, String name, String userName, String email, String password) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
-	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	result = prime * result + ((password == null) ? 0 : password.hashCode());
-	return result;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	DBUser other = (DBUser) obj;
-	if (email == null) {
-	    if (other.email != null)
-		return false;
-	} else if (!email.equals(other.email))
-	    return false;
-	if (id == null) {
-	    if (other.id != null)
-		return false;
-	} else if (!id.equals(other.id))
-	    return false;
-	if (name == null) {
-	    if (other.name != null)
-		return false;
-	} else if (!name.equals(other.name))
-	    return false;
-	if (password == null) {
-	    if (other.password != null)
-		return false;
-	} else if (!password.equals(other.password))
-	    return false;
-	return true;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    @Override
-    public String toString() {
-	return "DBUser [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + "]";
-    }
-    
-    
-    
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, id, name, password, userName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DBUser other = (DBUser) obj;
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(name, other.name) && Objects.equals(password, other.password)
+				&& Objects.equals(userName, other.userName);
+	}
+
+	@Override
+	public String toString() {
+		return "DBUser [id=" + id + ", name=" + name + ", userName=" + userName + ", email=" + email + ", password=" + password + "]";
+	}
 
 }

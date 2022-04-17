@@ -2,7 +2,20 @@ package com.reviewservice.utils;
 
 public class StringUtils {
 
-    public static boolean isEmpty(String str) {
-	return str == null || str.isEmpty();
-    }
+	public static boolean isEmpty(String str) {
+		return str == null || str.isEmpty();
+	}
+
+	public static boolean validateUserNameFormat(String userName) {
+		if (userName == null || userName.isEmpty())
+			return false;
+		if (userName.contains(" "))
+			return false;
+		// boolean x = userName.matches("[^\\/,\"']\\S*");
+		boolean x = userName.contains(" ") || userName.contains("\\") || 
+				userName.contains("/") || userName.contains(",") || userName.contains("\"")
+				|| 		userName.contains("'");
+		return !x;
+
+	}
 }

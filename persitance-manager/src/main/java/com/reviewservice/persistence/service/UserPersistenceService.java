@@ -40,9 +40,13 @@ public class UserPersistenceService {
 	public User createUser(User user) throws PersistenceServiceException {
 		if (StringUtils.isEmpty(user.getEmail()))
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Email for user can not be empty");
-		List<DBUser> dbUsers = repository.findByEmail(user.getEmail());
+		if (StringUtils.isEmpty(user.getUserName()))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName for user can not be empty");
+		List<DBUser> dbUsers = repository.findByUserName(user.getUserName());
 		if (!CollectionUtils.isEmpty(dbUsers))
-			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Email already exists");
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName already exists");
+		if(dbUsers.size() > 1)
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Invalid Database state, Multiple ids with 'userName' exists");
 		user.setId(UID.getUUID());
 		try {
 			DBUser dbUser = repository.save(UserAdapter.convertToDBUser(user));
@@ -53,7 +57,36 @@ public class UserPersistenceService {
 		} catch (Exception e) {
 			throw new PersistenceServiceException(e.getMessage(), e);
 		}
+	}
+	
+	public String login(String userName, String password) throws PersistenceServiceException {
+		
+		if(StringUtils.isEmpty(userName))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
+		if(StringUtils.isEmpty(password))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "password can not be null or empty");
+		
+		List<DBUser> dbUsers = repository.findByUserName(userName);
+		if(CollectionUtils.isEmpty(dbUsers))
+			throw new PersistenceServiceException(ErrorCode.NOT_FOUND, "usename not found");
+		if(dbUsers.size() > 1)
+			throw new PersistenceServiceException(ErrorCode.INTERNAL_SERVER_ERROR, "Multiple Username for found with userName: "  + userName);
 
+
+		
+		return password;
+		
+		
 	}
 
+	public User getUserByUserName(String userName) throws PersistenceServiceException {
+		if(StringUtils.isEmpty(userName))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
+		List<DBUser> dbUsers = repository.findByUserName(userName);
+		if(CollectionUtils.isEmpty(dbUsers))
+			throw new PersistenceServiceException(ErrorCode.NOT_FOUND, "usename not found");
+		if(dbUsers.size() > 1)
+			throw new PersistenceServiceException(ErrorCode.INTERNAL_SERVER_ERROR, "Multiple Username for found with userName: "  + userName);
+		return UserAdapter.convertToUser(dbUsers.get(0));
+	}
 }
