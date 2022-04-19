@@ -1,7 +1,7 @@
 package com.reviewservice.persistence.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,18 +23,14 @@ public class UserPersistenceService {
 	private UserRepository repository;
 
 	public List<User> getAllUsers() {
-		List<DBUser> dbUsers = repository.findAll();
-		List<User> users = new ArrayList<>();
-		for (DBUser dbUser : dbUsers) {
-			users.add(UserAdapter.convertToUser(dbUser));
-		}
-		// dbUsers.stream().forEach(dbUser ->
-		// users.add(UserAdapter.convertToUser(dbUser)));
-		// dbUsers.stream().map(dbUser ->
-		// UserAdapter.convertToUser(dbUser)).collect(Collectors.toList());
-		// return repository.findAll().stream().map(dbUser ->
-		// UserAdapter.convertToUser(dbUser)).collect(Collectors.toList());
-		return users;
+		/*
+		 * List<DBUser> dbUsers = repository.findAll(); List<User> users = new
+		 * ArrayList<>(); for (DBUser dbUser : dbUsers) {
+		 * users.add(UserAdapter.convertToUserWithNoPassword(dbUser)); }
+		 * return users;
+		 */
+		return repository.findAll().stream().map(dbUser -> UserAdapter.convertToUserWithNoPassword(dbUser)).collect(Collectors.toList());
+		
 	}
 
 	public User createUser(User user) throws PersistenceServiceException {
@@ -45,7 +41,7 @@ public class UserPersistenceService {
 		List<DBUser> dbUsers = repository.findByUserName(user.getUserName());
 		if (!CollectionUtils.isEmpty(dbUsers))
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName already exists");
-		if(dbUsers.size() > 1)
+		if (dbUsers.size() > 1)
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "Invalid Database state, Multiple ids with 'userName' exists");
 		user.setId(UID.getUUID());
 		try {
@@ -58,35 +54,32 @@ public class UserPersistenceService {
 			throw new PersistenceServiceException(e.getMessage(), e);
 		}
 	}
-	
+
 	public String login(String userName, String password) throws PersistenceServiceException {
-		
-		if(StringUtils.isEmpty(userName))
+
+		if (StringUtils.isEmpty(userName))
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
-		if(StringUtils.isEmpty(password))
+		if (StringUtils.isEmpty(password))
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "password can not be null or empty");
-		
+
 		List<DBUser> dbUsers = repository.findByUserName(userName);
-		if(CollectionUtils.isEmpty(dbUsers))
+		if (CollectionUtils.isEmpty(dbUsers))
 			throw new PersistenceServiceException(ErrorCode.NOT_FOUND, "usename not found");
-		if(dbUsers.size() > 1)
-			throw new PersistenceServiceException(ErrorCode.INTERNAL_SERVER_ERROR, "Multiple Username for found with userName: "  + userName);
+		if (dbUsers.size() > 1)
+			throw new PersistenceServiceException(ErrorCode.INTERNAL_SERVER_ERROR, "Multiple Username for found with userName: " + userName);
 
-
-		
 		return password;
-		
-		
+
 	}
 
 	public User getUserByUserName(String userName) throws PersistenceServiceException {
-		if(StringUtils.isEmpty(userName))
+		if (StringUtils.isEmpty(userName))
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
 		List<DBUser> dbUsers = repository.findByUserName(userName);
-		if(CollectionUtils.isEmpty(dbUsers))
+		if (CollectionUtils.isEmpty(dbUsers))
 			throw new PersistenceServiceException(ErrorCode.NOT_FOUND, "usename not found");
-		if(dbUsers.size() > 1)
-			throw new PersistenceServiceException(ErrorCode.INTERNAL_SERVER_ERROR, "Multiple Username for found with userName: "  + userName);
+		if (dbUsers.size() > 1)
+			throw new PersistenceServiceException(ErrorCode.INTERNAL_SERVER_ERROR, "Multiple Username for found with userName: " + userName);
 		return UserAdapter.convertToUser(dbUsers.get(0));
 	}
 }

@@ -18,23 +18,24 @@ import com.reviewservice.businees.objects.Session;
 import com.reviewservice.businees.objects.User;
 import com.reviewservice.exceptions.ErrorCode;
 import com.reviewservice.exceptions.PersistenceServiceException;
-import com.reviewservice.persistence.service.SessionPersistenceService;
 import com.reviewservice.persistence.service.UserPersistenceService;
 import com.reviewservice.rest.exceptions.UserServiceException;
+import com.reviewservice.services.SessionService;
 import com.reviewservice.utils.StringUtils;
 
 @RestController
-@RequestMapping("userService")
+@RequestMapping("user-mangement")
 public class UserManagementController {
 
 	@Autowired
 	private UserPersistenceService userPersistenceService;
 	
 	@Autowired
-	private SessionPersistenceService sessionPersistenceService;
+	private SessionService sessionService;
 
 	@GetMapping("/users")
-	public List<User> getAllUsers() {
+	public List<User> getAllUsers(@RequestHeader(name = "sessionId", required = true) String sessionId) throws PersistenceServiceException, UserServiceException {
+		sessionService.validateSession(sessionId);
 		return userPersistenceService.getAllUsers();
 	}
 	
@@ -44,10 +45,10 @@ public class UserManagementController {
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
 		if(StringUtils.isEmpty(password))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "password can not be null or empty");
-		User user = userPersistenceService.getUserByUserName(password);
+		User user = userPersistenceService.getUserByUserName(userName);
 		if(!password.equals(user.getPassword()))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Incorrect password");
-		Session session = sessionPersistenceService.createSession(user.getId());
+		Session session = sessionService.createSession(user.getId());
 		Map<String, String> map = new HashMap<>();
 		map.put("message", "Login successful");
 		map.put("sessionId", session.getSessionId());

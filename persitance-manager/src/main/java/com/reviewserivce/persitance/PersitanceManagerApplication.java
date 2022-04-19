@@ -9,5 +9,4 @@ public class PersitanceManagerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PersitanceManagerApplication.class, args);
 	}
-
 }

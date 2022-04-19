@@ -27,13 +27,21 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(String id, String name,  String userName, String email, String password) {
+	public User(String id, String name, String userName, String email, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
+	}
+
+	public User(String id, String name, String userName, String email) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.userName = userName;
+		this.email = email;
 	}
 
 	public String getId() {
