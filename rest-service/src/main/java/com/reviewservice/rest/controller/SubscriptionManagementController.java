@@ -39,15 +39,26 @@ public class SubscriptionManagementController {
 	@PostMapping("/subscriptions/{subscriptionId}")
 	public String subscribe(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String subscriptionId)
 			throws PersistenceServiceException, UserServiceException {
-		if(StringUtils.isEmptyOrBlank(subscriptionId))
+		if (StringUtils.isEmptyOrBlank(subscriptionId))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid Subscription Id : '" + subscriptionId + "'. subscriptionId can not be null/blank");
 		String userId = sessionService.validateSession(sessionId).getUserId();
 		if (!subscriptionPersistenceService.isSubscriptionPresent(subscriptionId))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid Subscription Id : '" + subscriptionId + "'. No such subscription present");
-		if(subscriptionPersistenceService.isSubscriptionForUserPresent(userId, subscriptionId))
+		if (subscriptionPersistenceService.isSubscriptionForUserPresent(userId, subscriptionId))
 			throw new UserServiceException(ErrorCode.CONFLICT, "User already subscribed to subscriptionId : " + subscriptionId);
 		subscriptionPersistenceService.subscribe(userId, subscriptionId);
 		return "Subscription sussessful";
+	}
+
+	@GetMapping("/{userId}/subscriptions")
+	public List<Subscription> getAllSubcriptionsForUser(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String userId)
+			throws PersistenceServiceException, UserServiceException {
+		if (StringUtils.isEmptyOrBlank(userId))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid userId Id : '" + userId + "'. userId can not be null/blank");
+		String userIdFromSession = sessionService.validateSession(sessionId).getUserId();
+		if (!userIdFromSession.equals(userId))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Session does not match the userId, provided");
+		return subscriptionPersistenceService.getAllSubscriptionsForUser(userId);
 	}
 
 }
