@@ -2,8 +2,6 @@ package com.reviewservice.rest.controller;
 
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +30,7 @@ public class SubscriptionManagementController {
 
 	@GetMapping("/subscriptions")
 	public List<Subscription> getAllSubcriptions(@RequestHeader(name = "sessionId", required = true) String sessionId) throws PersistenceServiceException, UserServiceException {
-		sessionService.validateSession(sessionId).getUserId();
+		sessionService.validateSession(sessionId);
 		return subscriptionPersistenceService.getAllSubscriptions();
 	}
 

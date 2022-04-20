@@ -29,7 +29,7 @@ public class UserManagementController {
 
 	@Autowired
 	private UserPersistenceService userPersistenceService;
-	
+
 	@Autowired
 	private SessionService sessionService;
 
@@ -38,15 +38,16 @@ public class UserManagementController {
 		sessionService.validateSession(sessionId);
 		return userPersistenceService.getAllUsers();
 	}
-	
+
 	@PostMapping("/users/login")
-	public Map<String, String> login(@RequestHeader(name = "userName", required = true) String userName, @RequestHeader(name = "password", required = true) String password) throws UserServiceException, PersistenceServiceException{
-		if(StringUtils.isEmpty(userName))
+	public Map<String, String> login(@RequestHeader(name = "userName", required = true) String userName, @RequestHeader(name = "password", required = true) String password)
+			throws UserServiceException, PersistenceServiceException {
+		if (StringUtils.isEmpty(userName))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
-		if(StringUtils.isEmpty(password))
+		if (StringUtils.isEmpty(password))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "password can not be null or empty");
 		User user = userPersistenceService.getUserByUserName(userName);
-		if(!password.equals(user.getPassword()))
+		if (!password.equals(user.getPassword()))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Incorrect password");
 		Session session = sessionService.createSession(user.getId());
 		Map<String, String> map = new HashMap<>();
@@ -55,9 +56,17 @@ public class UserManagementController {
 		return map;
 	}
 
+	@PostMapping("/users/logout")
+	public String logout(@RequestHeader(name = "sessionId", required = true) String sessionId) throws UserServiceException, PersistenceServiceException {
+		if (StringUtils.isEmpty(sessionId))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "sessionId can not be null or empty");
+		sessionService.logout(sessionId);
+		return "Logged out successfully";
+	}
+
 	@PostMapping("/createUser")
 	public User createUser(@RequestBody @Valid User user) throws PersistenceServiceException, UserServiceException {
-		if(!StringUtils.validateUserNameFormat(user.getUserName()))
+		if (!StringUtils.validateUserNameFormat(user.getUserName()))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid userName");
 		return userPersistenceService.createUser(user);
 	}

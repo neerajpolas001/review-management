@@ -26,11 +26,10 @@ public class UserPersistenceService {
 		/*
 		 * List<DBUser> dbUsers = repository.findAll(); List<User> users = new
 		 * ArrayList<>(); for (DBUser dbUser : dbUsers) {
-		 * users.add(UserAdapter.convertToUserWithNoPassword(dbUser)); }
-		 * return users;
+		 * users.add(UserAdapter.convertToUserWithNoPassword(dbUser)); } return users;
 		 */
 		return repository.findAll().stream().map(dbUser -> UserAdapter.convertToUserWithNoPassword(dbUser)).collect(Collectors.toList());
-		
+
 	}
 
 	public User createUser(User user) throws PersistenceServiceException {
@@ -67,7 +66,6 @@ public class UserPersistenceService {
 			throw new PersistenceServiceException(ErrorCode.NOT_FOUND, "usename not found");
 		if (dbUsers.size() > 1)
 			throw new PersistenceServiceException(ErrorCode.INTERNAL_SERVER_ERROR, "Multiple Username for found with userName: " + userName);
-
 		return password;
 
 	}

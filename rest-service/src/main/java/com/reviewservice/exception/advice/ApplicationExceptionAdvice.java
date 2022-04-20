@@ -51,5 +51,14 @@ public class ApplicationExceptionAdvice {
 		map.put("ErrorCode", e.getErrorCode().toString());
 		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
 	}
+	
+	/*
+	 * @ExceptionHandler(Exception.class) public ResponseEntity<Map<String, String>>
+	 * handleMethodArgumentNotValidException(Exception e) {
+	 * logger.error(e.getMessage(), e); Map<String, String> map = new HashMap<>();
+	 * map.put("errorCode", ErrorCode.INTERNAL_SERVER_ERROR.getCode() +
+	 * "Problem occured at server side!"); return
+	 * ResponseEntity.status(ErrorCode.BAD_REQUEST.getCode()).body(map); }
+	 */
 
 }

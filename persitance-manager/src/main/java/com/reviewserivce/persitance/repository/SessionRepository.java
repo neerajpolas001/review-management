@@ -9,4 +9,5 @@ import com.reviewserivce.persitance.db.objects.DBSession;
 public interface SessionRepository extends JpaRepository<DBSession, String> {
 	
 	public List<DBSession> findByUserId(String userId);
+	
 }

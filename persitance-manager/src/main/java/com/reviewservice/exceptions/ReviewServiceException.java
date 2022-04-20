@@ -21,7 +21,7 @@ public abstract class ReviewServiceException extends Exception {
 	public ReviewServiceException(ErrorCode errorCode, String message, Throwable cause) {
 		super(message, cause);
 		this.errorCode = errorCode;
-		
+
 	}
 
 	public ReviewServiceException(ErrorCode errorCode, String message) {
