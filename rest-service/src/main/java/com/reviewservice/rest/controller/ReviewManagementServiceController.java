@@ -24,7 +24,7 @@ import com.reviewservice.services.SessionService;
 @RestController
 @RequestMapping("review-management")
 @EnableTransactionManagement
-public class ReviewServiceController {
+public class ReviewManagementServiceController {
 
 	@Autowired
 	private SessionService sessionService;
