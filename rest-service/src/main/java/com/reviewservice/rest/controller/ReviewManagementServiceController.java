@@ -38,7 +38,9 @@ public class ReviewManagementServiceController {
 		String userId = sessionService.validateSession(sessionId).getUserId();
 		if (!userId.equals(review.getUserId()))
 			new ReviewManagementServiceException(ErrorCode.BAD_REQUEST, "userId in Review does not belong to the currrent session, please relogin with appropriate user");
-		return reviewPersistenceService.saveReview(review);
+		Review reviewRespose = reviewPersistenceService.saveReview(review);
+		// TODO - send review to JMS queue for Sentiment Analysis
+		return reviewRespose;
 	}
 
 	@GetMapping("/reviews/test")
