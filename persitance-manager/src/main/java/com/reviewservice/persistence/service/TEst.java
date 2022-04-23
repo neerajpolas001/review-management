@@ -1,8 +1,10 @@
 package com.reviewservice.persistence.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import com.reviewservice.businees.objects.Session;
@@ -20,9 +22,12 @@ public class TEst {
 		 * date = calendar.getTime();
 		 */
 		
-		Date date = DateUtils.getDateGMT();
-		date = new Date(date.getTime() - 108000000);
-		System.out.println(SessionUtils.validateSessionTimeout(new Session(null, null, date)));
+//		Date date = DateUtils.getDateGMT();
+//		date = new Date(date.getTime() - 108000000);
+//		System.out.println(SessionUtils.validateSessionTimeout(new Session(null, null, date)));
+		
+		List<String> list = new ArrayList<>();
+		System.out.println(list.get(0));
 		
 	}
 }

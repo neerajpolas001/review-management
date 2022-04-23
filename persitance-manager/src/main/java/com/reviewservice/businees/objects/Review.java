@@ -39,6 +39,10 @@ public class Review {
 	@NotBlank(message = "country can not be null/empty")
 	private String country;
 
+	private String sentiment;
+
+	private double polarity;
+
 	private HashMap<String, String> metaData;
 
 	public Review() {
@@ -46,7 +50,7 @@ public class Review {
 	}
 
 	public Review(String id, String userId, String text, String branchId, String branchName, String orderType, Date dateCreated, Date dateModiefied, String rating, int votes,
-			String city, String state, String country) {
+			String city, String state, String country, String sentiment, double polarity) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -61,6 +65,8 @@ public class Review {
 		this.city = city;
 		this.state = state;
 		this.country = country;
+		this.sentiment = sentiment;
+		this.polarity = polarity;
 	}
 
 	private Review(ReviewBuilder builder) {
@@ -79,6 +85,8 @@ public class Review {
 		this.state = builder.state;
 		this.country = builder.country;
 		this.metaData = builder.metaData;
+		this.sentiment = builder.sentiment;
+		this.polarity = builder.polarity;
 	}
 
 	public String getId() {
@@ -193,6 +201,22 @@ public class Review {
 		this.metaData = metaData;
 	}
 
+	public String getSentiment() {
+		return sentiment;
+	}
+
+	public void setSentiment(String sentiment) {
+		this.sentiment = sentiment;
+	}
+
+	public double getPolarity() {
+		return polarity;
+	}
+
+	public void setPolarity(double polarity) {
+		this.polarity = polarity;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(branchId, branchName, city, country, dateCreated, dateModiefied, id, metaData, orderType, rating, state, text, userId, votes);
@@ -217,7 +241,7 @@ public class Review {
 	public String toString() {
 		return "Review [id=" + id + ", userId=" + userId + ", text=" + text + ", branchId=" + branchId + ", branchName=" + branchName + ", orderType=" + orderType
 				+ ", dateCreated=" + dateCreated + ", dateModiefied=" + dateModiefied + ", rating=" + rating + ", votes=" + votes + ", city=" + city + ", state=" + state
-				+ ", country=" + country + ", metaData=" + metaData + "]";
+				+ ", country=" + country + ", sentiment=" + sentiment + ", polarity=" + polarity + ", metaData=" + metaData + "]";
 	}
 
 	public static class ReviewBuilder {
@@ -246,6 +270,10 @@ public class Review {
 		private String state;
 
 		private String country;
+
+		private String sentiment;
+
+		private double polarity;
 
 		private HashMap<String, String> metaData;
 
@@ -321,6 +349,17 @@ public class Review {
 
 		public ReviewBuilder metaData(HashMap<String, String> metaData) {
 			this.metaData = metaData;
+			return this;
+		}
+
+		
+		public ReviewBuilder sentiment(String sentiment) {
+			this.sentiment = sentiment;
+			return this;
+		}
+
+		public ReviewBuilder polarity(double polarity) {
+			this.polarity = polarity;
 			return this;
 		}
 

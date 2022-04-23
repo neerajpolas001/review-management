@@ -51,13 +51,19 @@ public class DBReview {
 	@Column
 	private String country;
 
+	@Column
+	private String sentiment;
+
+	@Column
+	private double polarity;
+
 	public DBReview() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public DBReview(String id, String userId, String text, String branchId, String branchName, String orderType, Date dateCreated, Date dateModiefied, String rating, int votes,
-			String city, String state, String country) {
+			String city, String state, String country, String sentiment, double polarity) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -72,6 +78,8 @@ public class DBReview {
 		this.city = city;
 		this.state = state;
 		this.country = country;
+		this.sentiment = sentiment;
+		this.polarity = polarity;
 	}
 
 	private DBReview(DBReviewBuilder builder) {
@@ -89,6 +97,8 @@ public class DBReview {
 		this.city = builder.city;
 		this.state = builder.state;
 		this.country = builder.country;
+		this.sentiment = builder.sentiment;
+		this.polarity = builder.polarity;
 	}
 
 	public String getId() {
@@ -195,6 +205,22 @@ public class DBReview {
 		this.country = country;
 	}
 
+	public String getSentiment() {
+		return sentiment;
+	}
+
+	public void setSentiment(String sentiment) {
+		this.sentiment = sentiment;
+	}
+
+	public double getPolarity() {
+		return polarity;
+	}
+
+	public void setPolarity(double polarity) {
+		this.polarity = polarity;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(branchId, branchName, city, country, dateCreated, dateModiefied, id, orderType, rating, state, text, userId, votes);
@@ -219,7 +245,7 @@ public class DBReview {
 	public String toString() {
 		return "DBReview [id=" + id + ", userId=" + userId + ", text=" + text + ", branchId=" + branchId + ", branchName=" + branchName + ", orderType=" + orderType
 				+ ", dateCreated=" + dateCreated + ", dateModiefied=" + dateModiefied + ", rating=" + rating + ", votes=" + votes + ", city=" + city + ", state=" + state
-				+ ", country=" + country + "]";
+				+ ", country=" + country + ", sentiment=" + sentiment + ", polarity=" + polarity + "]";
 	}
 
 	public static class DBReviewBuilder {
@@ -248,6 +274,10 @@ public class DBReview {
 		private String state;
 
 		private String country;
+
+		private String sentiment;
+
+		private double polarity;
 
 		public DBReviewBuilder() {
 			super();
@@ -316,6 +346,16 @@ public class DBReview {
 
 		public DBReviewBuilder country(String country) {
 			this.country = country;
+			return this;
+		}
+
+		public DBReviewBuilder sentiment(String sentiment) {
+			this.sentiment = sentiment;
+			return this;
+		}
+
+		public DBReviewBuilder polarity(double polarity) {
+			this.polarity = polarity;
 			return this;
 		}
 

@@ -17,7 +17,8 @@ public class ReviewAdapter {
 	public static Review convertToReview(DBReview dbReview, List<DBReviewMetadata> dbReviewMetadataList) {
 		ReviewBuilder reviewBuilder = new Review.ReviewBuilder().id(dbReview.getId()).userId(dbReview.getUserId()).text(dbReview.getText()).branchId(dbReview.getBranchId())
 				.branchName(dbReview.getBranchName()).orderType(dbReview.getOrderType()).dateCreated(dbReview.getDateCreated()).dateModiefied(dbReview.getDateModiefied())
-				.rating(dbReview.getRating()).votes(dbReview.getVotes()).city(dbReview.getCity()).state(dbReview.getState()).country(dbReview.getCountry());
+				.rating(dbReview.getRating()).votes(dbReview.getVotes()).city(dbReview.getCity()).state(dbReview.getState()).country(dbReview.getCountry())
+				.sentiment(dbReview.getSentiment()).polarity(dbReview.getPolarity());
 		if (!CollectionUtils.isEmpty(dbReviewMetadataList)) {
 			for (DBReviewMetadata dbReviewMetadata : dbReviewMetadataList) {
 				HashMap<String, String> map = new HashMap<>();
@@ -30,7 +31,8 @@ public class ReviewAdapter {
 	public static DBReview convertToDBReview(Review review) {
 		DBReviewBuilder reviewBuilder = new DBReview.DBReviewBuilder().id(review.getId()).userId(review.getUserId()).text(review.getText()).branchId(review.getBranchId())
 				.branchName(review.getBranchName()).orderType(review.getOrderType()).dateCreated(review.getDateCreated()).dateModiefied(review.getDateModiefied())
-				.rating(review.getRating()).votes(review.getVotes()).city(review.getCity()).state(review.getState()).country(review.getCountry());
+				.rating(review.getRating()).votes(review.getVotes()).city(review.getCity()).state(review.getState()).country(review.getCountry()).sentiment(review.getSentiment())
+				.polarity(review.getPolarity());
 		List<DBReviewMetadata> dbReviewMetadataList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(review.getMetaData())) {
 			for (Entry<String, String> entry : review.getMetaData().entrySet()) {

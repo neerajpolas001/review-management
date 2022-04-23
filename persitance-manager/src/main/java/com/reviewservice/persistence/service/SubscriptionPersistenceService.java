@@ -15,7 +15,7 @@ import com.reviewserivce.persitance.repository.UserAndSubscriptionRepository;
 import com.reviewservice.businees.objects.Subscription;
 import com.reviewservice.exceptions.PersistenceServiceException;
 import com.reviewservice.persistence.adapters.SubscriptionAdatper;
-import com.reviewservice.utils.StringUtils;
+import com.reviewservice.utils.CollectionUtils;
 
 @Service
 public class SubscriptionPersistenceService {
@@ -36,7 +36,7 @@ public class SubscriptionPersistenceService {
 
 	public List<Subscription> getAllSubscriptions() throws PersistenceServiceException {
 		try {
-			return subscriptionsRepository.findAll().stream().map(dbSubscription -> SubscriptionAdatper.convertToSubscription(dbSubscription)).collect(Collectors.toList());
+			return SubscriptionAdatper.convertToSubscription(subscriptionsRepository.findAll());
 		} catch (Exception e) {
 			throw new PersistenceServiceException(e.getMessage(), e);
 		}
@@ -45,9 +45,10 @@ public class SubscriptionPersistenceService {
 	public List<Subscription> getAllSubscriptionsForUser(String userId) throws PersistenceServiceException {
 
 		try {
+
 			List<String> subscriptionIds = userAndSubscriptionRepository.findByUserId(userId).stream().map(userAndSub -> userAndSub.getSubscriptionId())
 					.collect(Collectors.toList());
-			return subscriptionsRepository.findAllById(subscriptionIds).stream().map(dbSub -> SubscriptionAdatper.convertToSubscription(dbSub)).collect(Collectors.toList());
+			return SubscriptionAdatper.convertToSubscription(subscriptionsRepository.findAllById(subscriptionIds));
 		} catch (Exception e) {
 			throw new PersistenceServiceException(e.getMessage(), e);
 		}
@@ -66,6 +67,28 @@ public class SubscriptionPersistenceService {
 		try {
 			Optional<DBUserAndSubscription> optional = userAndSubscriptionRepository.findById(new DBUserAndSubscriptionCompositeKey(userId, subscriptionId));
 			return optional.isPresent();
+		} catch (Exception e) {
+			throw new PersistenceServiceException(e.getMessage(), e);
+		}
+	}
+
+	public Subscription getSubscriptionByName(String name) throws PersistenceServiceException {
+		try {
+
+			List<DBSubscription> dbSubscriptions = subscriptionsRepository.findByName(name);
+			if (CollectionUtils.isEmpty(dbSubscriptions))
+				return null;
+			if (dbSubscriptions.size() > 1)
+				throw new PersistenceServiceException("Internal Database state error : Multiple Subscription with same name '" + name + "' exists");
+			return SubscriptionAdatper.convertToSubscription(dbSubscriptions.get(0));
+		} catch (Exception e) {
+			throw new PersistenceServiceException(e.getMessage(), e);
+		}
+	}
+
+	public Subscription getSubscriptionById(String subscriptionId) throws PersistenceServiceException {
+		try {
+			return SubscriptionAdatper.convertToSubscription(subscriptionsRepository.getById(subscriptionId));
 		} catch (Exception e) {
 			throw new PersistenceServiceException(e.getMessage(), e);
 		}

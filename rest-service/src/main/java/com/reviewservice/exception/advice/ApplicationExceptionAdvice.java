@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.reviewservice.exceptions.ErrorCode;
 import com.reviewservice.exceptions.PersistenceServiceException;
+import com.reviewservice.exceptions.ReviewServiceException;
+import com.reviewservice.rest.exceptions.ReviewManagementServiceException;
 import com.reviewservice.rest.exceptions.UserServiceException;
 
 @RestControllerAdvice
@@ -21,14 +23,16 @@ public class ApplicationExceptionAdvice {
 
 	@ExceptionHandler(PersistenceServiceException.class)
 	public ResponseEntity<Map<String, String>> handlePersistenceServiceException(PersistenceServiceException e) {
-		logger.error(e.getMessage(), e);
-		Map<String, String> map = new HashMap<>();
-		if (e.getErrorCode() == ErrorCode.INTERNAL_SERVER_ERROR)
-			map.put("Message", "Internal state error");
-		else
-			map.put("Message", e.getMessage());
-		map.put("ErrorCode", e.getErrorCode().toString());
-		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
+//		logger.error(e.getMessage(), e);
+//		Map<String, String> map = new HashMap<>();
+//		if (e.getErrorCode() == ErrorCode.INTERNAL_SERVER_ERROR)
+//			map.put("Message", "Internal state error");
+//		else
+//			map.put("Message", e.getMessage());
+//		map.put("ErrorCode", e.getErrorCode().toString());
+//		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
+		return handleRerroAndsendREsponse(e);
+
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -42,6 +46,24 @@ public class ApplicationExceptionAdvice {
 
 	@ExceptionHandler(UserServiceException.class)
 	public ResponseEntity<Map<String, String>> handleUserServiceException(UserServiceException e) {
+//		logger.error(e.getMessage(), e);
+//		Map<String, String> map = new HashMap<>();
+//		if (e.getErrorCode() == ErrorCode.INTERNAL_SERVER_ERROR)
+//			map.put("Message", "Internal error");
+//		else
+//			map.put("Message", e.getMessage());
+//		map.put("ErrorCode", e.getErrorCode().toString());
+//		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
+		return handleRerroAndsendREsponse(e);
+
+	}
+
+	@ExceptionHandler(ReviewManagementServiceException.class)
+	public ResponseEntity<Map<String, String>> handleUserServiceException(ReviewManagementServiceException e) {
+		return handleRerroAndsendREsponse(e);
+	}
+
+	private ResponseEntity<Map<String, String>> handleRerroAndsendREsponse(ReviewServiceException e) {
 		logger.error(e.getMessage(), e);
 		Map<String, String> map = new HashMap<>();
 		if (e.getErrorCode() == ErrorCode.INTERNAL_SERVER_ERROR)
@@ -51,14 +73,13 @@ public class ApplicationExceptionAdvice {
 		map.put("ErrorCode", e.getErrorCode().toString());
 		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
 	}
-	
-	/*
-	 * @ExceptionHandler(Exception.class) public ResponseEntity<Map<String, String>>
-	 * handleMethodArgumentNotValidException(Exception e) {
-	 * logger.error(e.getMessage(), e); Map<String, String> map = new HashMap<>();
-	 * map.put("errorCode", ErrorCode.INTERNAL_SERVER_ERROR.getCode() +
-	 * "Problem occured at server side!"); return
-	 * ResponseEntity.status(ErrorCode.BAD_REQUEST.getCode()).body(map); }
-	 */
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(Exception e) {
+		logger.error(e.getMessage(), e);
+		Map<String, String> map = new HashMap<>();
+		map.put("message", "Problem occured at server side!");
+		return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getCode()).body(map);
+	}
 
 }

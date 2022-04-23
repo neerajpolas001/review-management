@@ -3,6 +3,9 @@ package com.reviewserivce.persitance.db.objects;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class DBUserAndSubscriptionCompositeKey implements Serializable {
 	/**
 	 * 
@@ -22,6 +25,11 @@ public class DBUserAndSubscriptionCompositeKey implements Serializable {
 		super();
 		this.userId = userId;
 		this.subscriptionId = subscriptionId;
+	}
+
+	public DBUserAndSubscriptionCompositeKey(String userId) {
+		super();
+		this.userId = userId;
 	}
 
 	public String getUserId() {

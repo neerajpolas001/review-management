@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.reviewservice.businees.objects.Subscription;
 import com.reviewservice.exceptions.ErrorCode;
 import com.reviewservice.exceptions.PersistenceServiceException;
-import com.reviewservice.persistence.service.SubscriptionPersistenceService;
 import com.reviewservice.rest.exceptions.UserServiceException;
 import com.reviewservice.services.SessionService;
+import com.reviewservice.services.SubscriptionManagementService;
 import com.reviewservice.utils.StringUtils;
 
 @RestController
@@ -26,37 +26,31 @@ public class SubscriptionManagementController {
 	private SessionService sessionService;
 
 	@Autowired
-	private SubscriptionPersistenceService subscriptionPersistenceService;
+	private SubscriptionManagementService subscriptionManagementService;
 
 	@GetMapping("/subscriptions")
-	public List<Subscription> getAllSubcriptions(@RequestHeader(name = "sessionId", required = true) String sessionId) throws PersistenceServiceException, UserServiceException {
+	public List<Subscription> getAllSubscriptions(@RequestHeader(name = "sessionId", required = true) String sessionId) throws PersistenceServiceException, UserServiceException {
 		sessionService.validateSession(sessionId);
-		return subscriptionPersistenceService.getAllSubscriptions();
+		return subscriptionManagementService.getAllSubscriptions();
 	}
 
 	@PostMapping("/subscriptions/{subscriptionId}")
 	public String subscribe(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String subscriptionId)
 			throws PersistenceServiceException, UserServiceException {
-		if (StringUtils.isEmptyOrBlank(subscriptionId))
-			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid Subscription Id : '" + subscriptionId + "'. subscriptionId can not be null/blank");
 		String userId = sessionService.validateSession(sessionId).getUserId();
-		if (!subscriptionPersistenceService.isSubscriptionPresent(subscriptionId))
-			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid Subscription Id : '" + subscriptionId + "'. No such subscription present");
-		if (subscriptionPersistenceService.isSubscriptionForUserPresent(userId, subscriptionId))
-			throw new UserServiceException(ErrorCode.CONFLICT, "User already subscribed to subscriptionId : " + subscriptionId);
-		subscriptionPersistenceService.subscribe(userId, subscriptionId);
+		subscriptionManagementService.subscribe(userId, subscriptionId);
 		return "Subscription sussessful";
 	}
 
 	@GetMapping("/{userId}/subscriptions")
-	public List<Subscription> getAllSubcriptionsForUser(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String userId)
+	public List<Subscription> getAllSubscriptionsForUser(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String userId)
 			throws PersistenceServiceException, UserServiceException {
+		String userIdFromSession = sessionService.validateSession(sessionId).getUserId();
 		if (StringUtils.isEmptyOrBlank(userId))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid userId Id : '" + userId + "'. userId can not be null/blank");
-		String userIdFromSession = sessionService.validateSession(sessionId).getUserId();
 		if (!userIdFromSession.equals(userId))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Session does not match the userId, provided");
-		return subscriptionPersistenceService.getAllSubscriptionsForUser(userId);
+		return subscriptionManagementService.getAllSubscriptionsForUser(userId);
 	}
 
 }

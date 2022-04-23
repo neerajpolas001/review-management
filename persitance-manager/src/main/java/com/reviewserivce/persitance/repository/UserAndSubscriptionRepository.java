@@ -8,7 +8,7 @@ import com.reviewserivce.persitance.db.objects.DBUserAndSubscription;
 import com.reviewserivce.persitance.db.objects.DBUserAndSubscriptionCompositeKey;
 
 public interface UserAndSubscriptionRepository extends JpaRepository<DBUserAndSubscription, DBUserAndSubscriptionCompositeKey> {
-
-	public List<DBUserAndSubscription> findByUserId(String userId);
+	
+	List<DBUserAndSubscription> findByUserId(String userId);
 
 }
