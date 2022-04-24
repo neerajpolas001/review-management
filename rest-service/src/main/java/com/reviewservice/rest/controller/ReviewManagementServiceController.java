@@ -6,11 +6,13 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -96,6 +98,37 @@ public class ReviewManagementServiceController {
 			throws PersistenceServiceException, UserServiceException {
 		String userId = this.sessionService.validateSession(sessionId).getUserId();
 		return this.reviewPersistenceService.getAllLatestReviews(userId, pageNo, pageSize);
+	}
+
+	@GetMapping("{branchId}/reviews")
+	public List<Review> getAllLatestReviewsForBranch(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String branchId,
+			@RequestParam int pageNo, @RequestParam int pageSize) throws PersistenceServiceException, UserServiceException {
+		if (StringUtils.isEmptyOrBlank(branchId))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "branchId in review can not be null/empty/blank");
+		String userId = this.sessionService.validateSession(sessionId).getUserId();
+		return this.reviewPersistenceService.getAllLatestReviewsForBrachId(userId, branchId, pageNo, pageSize);
+	}
+
+	@GetMapping("/reviews/{sentiment}")
+	public List<Review> getAllLatestReviewsForSentiment(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String sentiment,
+			@RequestParam int pageNo, @RequestParam int pageSize) throws PersistenceServiceException, UserServiceException {
+		if (StringUtils.isEmptyOrBlank(sentiment))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "branchId in review can not be null/empty/blank");
+		sentiment = sentiment.toLowerCase();
+		String userId = this.sessionService.validateSession(sessionId).getUserId();
+		return this.reviewPersistenceService.getAllLatestReviewsForSentiment(userId, sentiment, pageNo, pageSize);
+	}
+
+	@GetMapping("{branchId}/reviews/{sentiment}")
+	public List<Review> getAllLatestReviewsForSentiment(@RequestHeader(name = "sessionId", required = true) String sessionId, @PathVariable(required = true) String branchId,
+			@PathVariable(required = true) String sentiment, @RequestParam int pageNo, @RequestParam int pageSize) throws PersistenceServiceException, UserServiceException {
+		if (StringUtils.isEmptyOrBlank(branchId))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "branchId in review can not be null/empty/blank");
+		if (StringUtils.isEmptyOrBlank(sentiment))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "branchId in review can not be null/empty/blank");
+		sentiment = sentiment.toLowerCase();
+		String userId = this.sessionService.validateSession(sessionId).getUserId();
+		return this.reviewPersistenceService.getAllLatestReviewsForBranchIdAndSentiment(userId, branchId, sentiment, pageNo, pageSize);
 	}
 
 	@GetMapping("/test-jms")

@@ -86,6 +86,28 @@ public class ReviewPersistenceService {
 	public List<Review> getAllLatestReviews(String userId, int pageNo, int pageSize) {
 		Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by(Sort.Direction.DESC, "date_created"));
 		List<DBReview> dbReviews = this.reviewRepository.findByUserId(userId, pageable);
+		return convertToReviewList(dbReviews);
+	}
+
+	public List<Review> getAllLatestReviewsForBrachId(String userId, String branchId, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by(Sort.Direction.DESC, "date_created"));
+		List<DBReview> dbReviews = this.reviewRepository.findByBrachId(userId, branchId, pageable);
+		return convertToReviewList(dbReviews);
+	}
+
+	public List<Review> getAllLatestReviewsForSentiment(String userId, String sentiment, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by(Sort.Direction.DESC, "date_created"));
+		List<DBReview> dbReviews = this.reviewRepository.findBySentiment(userId, sentiment, pageable);
+		return convertToReviewList(dbReviews);
+	}
+
+	public List<Review> getAllLatestReviewsForBranchIdAndSentiment(String userId, String branchId, String sentiment, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by(Sort.Direction.DESC, "date_created"));
+		List<DBReview> dbReviews = this.reviewRepository.findByBrachIdAndSentiment(userId, branchId, sentiment, pageable);
+		return convertToReviewList(dbReviews);
+	}
+
+	private List<Review> convertToReviewList(List<DBReview> dbReviews) {
 		return dbReviews.stream().map(m -> ReviewAdapter.convertToReview(m, null)).collect(Collectors.toList());
 	}
 

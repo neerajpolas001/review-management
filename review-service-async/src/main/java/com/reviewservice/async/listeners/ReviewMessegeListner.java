@@ -21,10 +21,6 @@ public class ReviewMessegeListner {
 
 	private Logger logger = LoggerFactory.getLogger(ReviewMessegeListner.class);
 
-	/*
-	 * @JmsListener(destination = "${jms.queue}") public void receiveMessage(String
-	 * message){ log.info("Received message: " + message); }
-	 */
 	@Autowired
 	@Qualifier("reviewMessageHandler")
 	private MessageHandler messageHandler;
