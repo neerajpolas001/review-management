@@ -30,6 +30,12 @@ public class Review {
 
 	private int votes;
 
+	@NotBlank(message = "reviewerName can not be null/empty")
+	private String reviewerName;
+
+	@NotBlank(message = "reviewerEmail can not be null/empty")
+	private String reviewerEmail;
+
 	@NotBlank(message = "city can not be null/empty")
 	private String city;
 
@@ -49,26 +55,6 @@ public class Review {
 		super();
 	}
 
-	public Review(String id, String userId, String text, String branchId, String branchName, String orderType, Date dateCreated, Date dateModiefied, String rating, int votes,
-			String city, String state, String country, String sentiment, double polarity) {
-		super();
-		this.id = id;
-		this.userId = userId;
-		this.text = text;
-		this.branchId = branchId;
-		this.branchName = branchName;
-		this.orderType = orderType;
-		this.dateCreated = dateCreated;
-		this.dateModiefied = dateModiefied;
-		this.rating = rating;
-		this.votes = votes;
-		this.city = city;
-		this.state = state;
-		this.country = country;
-		this.sentiment = sentiment;
-		this.polarity = polarity;
-	}
-
 	private Review(ReviewBuilder builder) {
 		super();
 		this.id = builder.id;
@@ -81,6 +67,8 @@ public class Review {
 		this.dateModiefied = builder.dateModiefied;
 		this.rating = builder.rating;
 		this.votes = builder.votes;
+		this.reviewerName = builder.reviewerName;
+		this.reviewerEmail = builder.reviewerEmail;
 		this.city = builder.city;
 		this.state = builder.state;
 		this.country = builder.country;
@@ -169,6 +157,22 @@ public class Review {
 		this.votes = votes;
 	}
 
+	public String getReviewerName() {
+		return reviewerName;
+	}
+
+	public void setReviewerName(String reviewerName) {
+		this.reviewerName = reviewerName;
+	}
+
+	public String getReviewerEmail() {
+		return reviewerEmail;
+	}
+
+	public void setReviewerEmail(String reviewerEmail) {
+		this.reviewerEmail = reviewerEmail;
+	}
+
 	public String getCity() {
 		return city;
 	}
@@ -219,7 +223,8 @@ public class Review {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(branchId, branchName, city, country, dateCreated, dateModiefied, id, metaData, orderType, rating, state, text, userId, votes);
+		return Objects.hash(branchId, branchName, city, country, dateCreated, dateModiefied, id, metaData, orderType, polarity, rating, reviewerEmail, reviewerName, sentiment,
+				state, text, userId, votes);
 	}
 
 	@Override
@@ -233,15 +238,18 @@ public class Review {
 		Review other = (Review) obj;
 		return Objects.equals(branchId, other.branchId) && Objects.equals(branchName, other.branchName) && Objects.equals(city, other.city)
 				&& Objects.equals(country, other.country) && Objects.equals(dateCreated, other.dateCreated) && Objects.equals(dateModiefied, other.dateModiefied)
-				&& Objects.equals(id, other.id) && Objects.equals(metaData, other.metaData) && Objects.equals(orderType, other.orderType) && Objects.equals(rating, other.rating)
+				&& Objects.equals(id, other.id) && Objects.equals(metaData, other.metaData) && Objects.equals(orderType, other.orderType)
+				&& Double.doubleToLongBits(polarity) == Double.doubleToLongBits(other.polarity) && Objects.equals(rating, other.rating)
+				&& Objects.equals(reviewerEmail, other.reviewerEmail) && Objects.equals(reviewerName, other.reviewerName) && Objects.equals(sentiment, other.sentiment)
 				&& Objects.equals(state, other.state) && Objects.equals(text, other.text) && Objects.equals(userId, other.userId) && votes == other.votes;
 	}
 
 	@Override
 	public String toString() {
 		return "Review [id=" + id + ", userId=" + userId + ", text=" + text + ", branchId=" + branchId + ", branchName=" + branchName + ", orderType=" + orderType
-				+ ", dateCreated=" + dateCreated + ", dateModiefied=" + dateModiefied + ", rating=" + rating + ", votes=" + votes + ", city=" + city + ", state=" + state
-				+ ", country=" + country + ", sentiment=" + sentiment + ", polarity=" + polarity + ", metaData=" + metaData + "]";
+				+ ", dateCreated=" + dateCreated + ", dateModiefied=" + dateModiefied + ", rating=" + rating + ", votes=" + votes + ", reviewerName=" + reviewerName
+				+ ", reviewerEmail=" + reviewerEmail + ", city=" + city + ", state=" + state + ", country=" + country + ", sentiment=" + sentiment + ", polarity=" + polarity
+				+ ", metaData=" + metaData + "]";
 	}
 
 	public static class ReviewBuilder {
@@ -264,6 +272,10 @@ public class Review {
 		private String rating;
 
 		private int votes;
+
+		private String reviewerName;
+
+		private String reviewerEmail;
 
 		private String city;
 
@@ -332,6 +344,16 @@ public class Review {
 			return this;
 		}
 
+		public ReviewBuilder reviewerName(String reviewerName) {
+			this.reviewerName = reviewerName;
+			return this;
+		}
+
+		public ReviewBuilder reviewerEmail(String reviewerEmail) {
+			this.reviewerEmail = reviewerEmail;
+			return this;
+		}
+
 		public ReviewBuilder city(String city) {
 			this.city = city;
 			return this;
@@ -352,7 +374,6 @@ public class Review {
 			return this;
 		}
 
-		
 		public ReviewBuilder sentiment(String sentiment) {
 			this.sentiment = sentiment;
 			return this;

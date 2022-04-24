@@ -19,7 +19,7 @@ import com.reviewservice.businees.objects.SubscriptionTypes;
 @Service
 public class ReviewMessegeListner {
 
-	Logger logger = LoggerFactory.getLogger(ReviewMessegeListner.class);
+	private Logger logger = LoggerFactory.getLogger(ReviewMessegeListner.class);
 
 	/*
 	 * @JmsListener(destination = "${jms.queue}") public void receiveMessage(String
@@ -27,7 +27,7 @@ public class ReviewMessegeListner {
 	 */
 	@Autowired
 	@Qualifier("reviewMessageHandler")
-	MessageHandler messageHandler;
+	private MessageHandler messageHandler;
 
 	@JmsListener(destination = "${jms.queue}")
 	public void receiveMessage(JobMessage message) {
@@ -37,10 +37,9 @@ public class ReviewMessegeListner {
 				this.messageHandler.processMessage(message);
 			}
 		} catch (ReviewServiceAsyncException e) {
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		}
-
 	}
 }

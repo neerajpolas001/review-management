@@ -74,12 +74,12 @@ public class ApplicationExceptionAdvice {
 		return ResponseEntity.status(e.getErrorCode().getCode()).body(map);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(Exception e) {
-		logger.error(e.getMessage(), e);
-		Map<String, String> map = new HashMap<>();
-		map.put("message", "Problem occured at server side!");
-		return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getCode()).body(map);
-	}
+	/*
+	 * @ExceptionHandler(Exception.class) public ResponseEntity<Map<String, String>>
+	 * handleMethodArgumentNotValidException(Exception e) {
+	 * logger.error(e.getMessage(), e); Map<String, String> map = new HashMap<>();
+	 * map.put("message", "Problem occured at server side!"); return
+	 * ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getCode()).body(map); }
+	 */
 
 }

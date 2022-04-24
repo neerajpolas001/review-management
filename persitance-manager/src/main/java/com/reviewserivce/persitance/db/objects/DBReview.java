@@ -42,6 +42,12 @@ public class DBReview {
 	@Column
 	private int votes;
 
+	@Column(name = "reviewer_name")
+	private String reviewerName;
+
+	@Column(name = "reviewer_email")
+	private String reviewerEmail;
+
 	@Column
 	private String city;
 
@@ -62,26 +68,6 @@ public class DBReview {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DBReview(String id, String userId, String text, String branchId, String branchName, String orderType, Date dateCreated, Date dateModiefied, String rating, int votes,
-			String city, String state, String country, String sentiment, double polarity) {
-		super();
-		this.id = id;
-		this.userId = userId;
-		this.text = text;
-		this.branchId = branchId;
-		this.branchName = branchName;
-		this.orderType = orderType;
-		this.dateCreated = dateCreated;
-		this.dateModiefied = dateModiefied;
-		this.rating = rating;
-		this.votes = votes;
-		this.city = city;
-		this.state = state;
-		this.country = country;
-		this.sentiment = sentiment;
-		this.polarity = polarity;
-	}
-
 	private DBReview(DBReviewBuilder builder) {
 		super();
 		this.id = builder.id;
@@ -99,6 +85,8 @@ public class DBReview {
 		this.country = builder.country;
 		this.sentiment = builder.sentiment;
 		this.polarity = builder.polarity;
+		this.reviewerName = builder.reviewerName;
+		this.reviewerEmail = builder.reviewerEmail;
 	}
 
 	public String getId() {
@@ -181,6 +169,22 @@ public class DBReview {
 		this.votes = votes;
 	}
 
+	public String getReviewerName() {
+		return reviewerName;
+	}
+
+	public void setReviewerName(String reviewerName) {
+		this.reviewerName = reviewerName;
+	}
+
+	public String getReviewerEmail() {
+		return reviewerEmail;
+	}
+
+	public void setReviewerEmail(String reviewerEmail) {
+		this.reviewerEmail = reviewerEmail;
+	}
+
 	public String getCity() {
 		return city;
 	}
@@ -223,7 +227,8 @@ public class DBReview {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(branchId, branchName, city, country, dateCreated, dateModiefied, id, orderType, rating, state, text, userId, votes);
+		return Objects.hash(branchId, branchName, city, country, dateCreated, dateModiefied, id, orderType, polarity, rating, reviewerEmail, reviewerName, sentiment, state, text,
+				userId, votes);
 	}
 
 	@Override
@@ -237,15 +242,17 @@ public class DBReview {
 		DBReview other = (DBReview) obj;
 		return Objects.equals(branchId, other.branchId) && Objects.equals(branchName, other.branchName) && Objects.equals(city, other.city)
 				&& Objects.equals(country, other.country) && Objects.equals(dateCreated, other.dateCreated) && Objects.equals(dateModiefied, other.dateModiefied)
-				&& Objects.equals(id, other.id) && Objects.equals(orderType, other.orderType) && Objects.equals(rating, other.rating) && Objects.equals(state, other.state)
-				&& Objects.equals(text, other.text) && Objects.equals(userId, other.userId) && votes == other.votes;
+				&& Objects.equals(id, other.id) && Objects.equals(orderType, other.orderType) && Double.doubleToLongBits(polarity) == Double.doubleToLongBits(other.polarity)
+				&& Objects.equals(rating, other.rating) && Objects.equals(reviewerEmail, other.reviewerEmail) && Objects.equals(reviewerName, other.reviewerName)
+				&& Objects.equals(sentiment, other.sentiment) && Objects.equals(state, other.state) && Objects.equals(text, other.text) && Objects.equals(userId, other.userId)
+				&& votes == other.votes;
 	}
 
 	@Override
 	public String toString() {
 		return "DBReview [id=" + id + ", userId=" + userId + ", text=" + text + ", branchId=" + branchId + ", branchName=" + branchName + ", orderType=" + orderType
-				+ ", dateCreated=" + dateCreated + ", dateModiefied=" + dateModiefied + ", rating=" + rating + ", votes=" + votes + ", city=" + city + ", state=" + state
-				+ ", country=" + country + ", sentiment=" + sentiment + ", polarity=" + polarity + "]";
+				+ ", dateCreated=" + dateCreated + ", dateModiefied=" + dateModiefied + ", rating=" + rating + ", votes=" + votes + ", reviewerName=" + reviewerName
+				+ ", reviewerEmail=" + reviewerEmail + ", city=" + city + ", state=" + state + ", country=" + country + ", sentiment=" + sentiment + ", polarity=" + polarity + "]";
 	}
 
 	public static class DBReviewBuilder {
@@ -268,6 +275,10 @@ public class DBReview {
 		private String rating;
 
 		private int votes;
+
+		private String reviewerName;
+
+		private String reviewerEmail;
 
 		private String city;
 
@@ -331,6 +342,16 @@ public class DBReview {
 
 		public DBReviewBuilder votes(int votes) {
 			this.votes = votes;
+			return this;
+		}
+
+		public DBReviewBuilder reviewerName(String reviewerName) {
+			this.reviewerName = reviewerName;
+			return this;
+		}
+
+		public DBReviewBuilder reviewerEmail(String reviewerEmail) {
+			this.reviewerEmail = reviewerEmail;
 			return this;
 		}
 

@@ -66,7 +66,6 @@ public class ReviewMessageHandler implements MessageHandler {
 			this.reviewPersistenceService.updateReview(new Review.ReviewBuilder().id(reviewId).sentiment(response.getSentiment()).polarity(response.getPolarity()).build());
 
 		} catch (URISyntaxException | PersistenceServiceException e) {
-
 			throw new ReviewServiceAsyncException(e.getMessage(), e);
 		}
 

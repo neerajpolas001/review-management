@@ -60,7 +60,6 @@ public class UserPersistenceService {
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
 		if (StringUtils.isEmpty(password))
 			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "password can not be null or empty");
-
 		List<DBUser> dbUsers = repository.findByUserName(userName);
 		if (CollectionUtils.isEmpty(dbUsers))
 			throw new PersistenceServiceException(ErrorCode.NOT_FOUND, "usename not found");

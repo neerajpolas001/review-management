@@ -5,8 +5,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,6 +81,12 @@ public class ReviewPersistenceService {
 		}
 		List<DBReviewMetadata> dbReviewMetadataResponseList = reviewMetaDataRepository.saveAll(dbReviewMetadatasList);
 		return ReviewAdapter.convertToReview(dbReviewResponse, dbReviewMetadataResponseList);
+	}
+
+	public List<Review> getAllLatestReviews(String userId, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by(Sort.Direction.DESC, "date_created"));
+		List<DBReview> dbReviews = this.reviewRepository.findByUserId(userId, pageable);
+		return dbReviews.stream().map(m -> ReviewAdapter.convertToReview(m, null)).collect(Collectors.toList());
 	}
 
 }
