@@ -69,8 +69,7 @@ public class ReportGenerationHandler implements MessageHandler {
 		try {
 			while (!CollectionUtils.isEmpty(reviews = this.reviewPersistenceService.getAllLatestReviews(userId, pageNo++, pageSize))) {
 				for (Review review : reviews) {
-					HashMap<String, String> modeData = new HashMap<>();
-					review.setMetaData(modeData);
+					review.setMetaData((HashMap<String, String>) this.reviewPersistenceService.getMetaDataForReview(review.getId()));
 				}
 				reportGenerator.write(reviews, this.fileSizeInKB);
 			}

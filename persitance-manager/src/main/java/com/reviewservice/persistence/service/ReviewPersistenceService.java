@@ -84,6 +84,11 @@ public class ReviewPersistenceService {
 		return ReviewAdapter.convertToReview(dbReviewResponse, dbReviewMetadataResponseList);
 	}
 
+	public Map<String, String> getMetaDataForReview(String reviewId) {
+		List<DBReviewMetadata> dbReviewMetadatas = this.reviewMetaDataRepository.findByReviewId(reviewId);
+		return dbReviewMetadatas.stream().collect(Collectors.toMap(k -> k.getKey(), v -> v.getValue()));
+	}
+
 	public List<Review> getAllLatestReviews(String userId, int pageNo, int pageSize) {
 		Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by(Sort.Direction.DESC, "date_created"));
 		List<DBReview> dbReviews = this.reviewRepository.findByUserId(userId, pageable);
