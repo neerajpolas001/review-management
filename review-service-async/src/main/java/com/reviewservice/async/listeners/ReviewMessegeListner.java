@@ -23,14 +23,21 @@ public class ReviewMessegeListner {
 
 	@Autowired
 	@Qualifier("reviewMessageHandler")
-	private MessageHandler messageHandler;
+	private MessageHandler reviewMessageHandler;
+
+	@Autowired
+	@Qualifier("reportGenerationHandler")
+	private MessageHandler reportGenerationHandler;
 
 	@JmsListener(destination = "${jms.queue}")
 	public void receiveMessage(JobMessage message) {
 		try {
 			if (SubscriptionTypes.SENTIMENT_ANALYSIS_BASIC.name().equals(message.getSubscriptionType())
 					|| SubscriptionTypes.SENTIMENT_ANALYSIS_ADVANCED.name().equals(message.getSubscriptionType())) {
-				this.messageHandler.processMessage(message);
+				this.reviewMessageHandler.processMessage(message);
+			}
+			if (SubscriptionTypes.REPORT_GENERATION.name().equals(message.getSubscriptionType())) {
+				this.reportGenerationHandler.processMessage(message);
 			}
 		} catch (ReviewServiceAsyncException e) {
 			this.logger.error(e.getMessage(), e);
