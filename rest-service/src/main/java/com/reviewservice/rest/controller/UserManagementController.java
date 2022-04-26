@@ -42,10 +42,10 @@ public class UserManagementController {
 	@PostMapping("/users/login")
 	public Map<String, String> login(@RequestHeader(name = "userName", required = true) String userName, @RequestHeader(name = "password", required = true) String password)
 			throws UserServiceException, PersistenceServiceException {
-		if (StringUtils.isEmpty(userName))
-			throw new UserServiceException(ErrorCode.BAD_REQUEST, "userName can not be null or empty");
-		if (StringUtils.isEmpty(password))
-			throw new UserServiceException(ErrorCode.BAD_REQUEST, "password can not be null or empty");
+		if (StringUtils.isEmptyOrBlank(userName))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "userName can not be null/empty/blank");
+		if (StringUtils.isEmptyOrBlank(password))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "password can not be null/empty/blank");
 		User user = userPersistenceService.getUserByUserName(userName);
 		if (!password.equals(user.getPassword()))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Incorrect password");
@@ -58,8 +58,8 @@ public class UserManagementController {
 
 	@PostMapping("/users/logout")
 	public String logout(@RequestHeader(name = "sessionId", required = true) String sessionId) throws UserServiceException, PersistenceServiceException {
-		if (StringUtils.isEmpty(sessionId))
-			throw new UserServiceException(ErrorCode.BAD_REQUEST, "sessionId can not be null or empty");
+		if (StringUtils.isEmptyOrBlank(sessionId))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "sessionId can not be null/empty/blank");
 		sessionService.logout(sessionId);
 		return "Logged out successfully";
 	}
@@ -68,6 +68,10 @@ public class UserManagementController {
 	public User createUser(@RequestBody @Valid User user) throws PersistenceServiceException, UserServiceException {
 		if (!StringUtils.validateUserNameFormat(user.getUserName()))
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid userName");
+		if (StringUtils.isEmptyOrBlank(user.getEmail()))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "email for user can not be null/empty/blank");
+		if (StringUtils.isEmptyOrBlank(user.getUserName()))
+			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userName for user can not be null/empty/blank");
 		return userPersistenceService.createUser(user);
 	}
 

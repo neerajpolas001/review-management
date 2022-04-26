@@ -18,6 +18,8 @@ public class SessionService {
 	private SessionPersistenceService sessionPersistenceService;
 
 	public Session validateSession(String sessionId) throws PersistenceServiceException, UserServiceException {
+		if (StringUtils.isEmptyOrBlank(sessionId))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "sessionId can not be null/empty/blank");
 		Session session = sessionPersistenceService.getSessionById(sessionId);
 		if (session == null)
 			throw new UserServiceException(ErrorCode.BAD_REQUEST, "Invalid Session : session not present");
@@ -31,8 +33,8 @@ public class SessionService {
 	}
 
 	public boolean logout(String sessionId) throws UserServiceException, PersistenceServiceException {
-		if (StringUtils.isEmpty(sessionId))
-			throw new UserServiceException(ErrorCode.BAD_REQUEST, "userId can not be null or empty");
+		if (StringUtils.isEmptyOrBlank(sessionId))
+			throw new UserServiceException(ErrorCode.BAD_REQUEST, "userId can not be null/empty/blank");
 		sessionPersistenceService.logout(sessionId);
 		return true;
 	}

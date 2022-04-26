@@ -30,18 +30,18 @@ public class ReviewServiceAsyncApplication {
 		SpringApplication.run(ReviewServiceAsyncApplication.class, args);
 	}
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void triggerEmail() throws ReviewServiceAsyncException {
-
-		JobMessage message = new JobMessage();
-		message.setSubscriptionType(SubscriptionTypes.REPORT_GENERATION.name());
-		HashMap<String, String> body = new HashMap<>();
-		body.put("userId", "c8aba65e-f1d0-488e-8e35-98741583831c");
-		body.put("email", "neeraj.polas@gmail.com");
-		Date date = new Date();
-		body.put("time", date.toString());
-		message.setBody(body);
-		handler.processMessage(message);
-	}
+//	@EventListener(ApplicationReadyEvent.class)
+//	public void triggerEmail() throws ReviewServiceAsyncException {
+//
+//		JobMessage message = new JobMessage();
+//		message.setSubscriptionType(SubscriptionTypes.REPORT_GENERATION.name());
+//		HashMap<String, String> body = new HashMap<>();
+//		body.put("userId", "c8aba65e-f1d0-488e-8e35-98741583831c");
+//		body.put("email", "polas.venkatesh@gmail.com");
+//		Date date = new Date();
+//		body.put("time", date.toString());
+//		message.setBody(body);
+//		handler.processMessage(message);
+//	}
 
 }

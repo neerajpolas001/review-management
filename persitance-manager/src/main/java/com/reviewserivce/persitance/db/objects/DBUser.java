@@ -40,6 +40,15 @@ public class DBUser {
 		this.password = password;
 	}
 
+	public DBUser(Builder builder) {
+		super();
+		this.id = builder.id;
+		this.name = builder.name;
+		this.userName = builder.userName;
+		this.email = builder.email;
+		this.password = builder.password;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -101,6 +110,53 @@ public class DBUser {
 	@Override
 	public String toString() {
 		return "DBUser [id=" + id + ", name=" + name + ", userName=" + userName + ", email=" + email + ", password=" + password + "]";
+	}
+
+	public static class Builder {
+		private String id;
+
+		private String name;
+
+		private String userName;
+
+		private String email;
+
+		private String password;
+
+		public Builder() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public Builder id(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder userName(String userName) {
+			this.userName = userName;
+			return this;
+		}
+
+		public Builder email(String email) {
+			this.email = email;
+			return this;
+		}
+
+		public Builder password(String password) {
+			this.password = password;
+			return this;
+		}
+
+		public DBUser build() {
+			return new DBUser(this);
+		}
+
 	}
 
 }

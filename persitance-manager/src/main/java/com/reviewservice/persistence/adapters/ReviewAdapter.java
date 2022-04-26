@@ -9,13 +9,13 @@ import com.reviewserivce.persitance.db.objects.DBReview;
 import com.reviewserivce.persitance.db.objects.DBReview.DBReviewBuilder;
 import com.reviewserivce.persitance.db.objects.DBReviewMetadata;
 import com.reviewservice.businees.objects.Review;
-import com.reviewservice.businees.objects.Review.ReviewBuilder;
+import com.reviewservice.businees.objects.Review.Builder;
 import com.reviewservice.utils.CollectionUtils;
 
 public class ReviewAdapter {
 
 	public static Review convertToReview(DBReview dbReview, List<DBReviewMetadata> dbReviewMetadataList) {
-		ReviewBuilder reviewBuilder = new Review.ReviewBuilder()
+		Builder reviewBuilder = new Review.Builder()
 				.id(dbReview.getId())
 				.userId(dbReview.getUserId())
 				.text(dbReview.getText())

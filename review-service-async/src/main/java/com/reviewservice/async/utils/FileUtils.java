@@ -48,4 +48,21 @@ public class FileUtils {
 		return file.length() / 1024;
 	}
 
+	public static void deleteAllFilesInFolder(String directorypath) {
+		File directory = new File(directorypath);
+		if (!directory.exists())
+			return;
+		for (File file : directory.listFiles()) {
+			if (file.isDirectory())
+				deleteAllFilesInFolder(file.getAbsolutePath());
+			file.delete();
+		}
+		directory.delete();
+	}
+
+//	public static void main(String[] args) throws ReviewServiceAsyncException {
+//
+//		deleteAllFilesInFolder("./temp/email-service/7ccb776c-fda3-4d76-a72a-911dde541169");
+//	}
+
 }

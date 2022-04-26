@@ -55,7 +55,7 @@ public class Review {
 		super();
 	}
 
-	private Review(ReviewBuilder builder) {
+	private Review(Builder builder) {
 		super();
 		this.id = builder.id;
 		this.userId = builder.userId;
@@ -252,7 +252,7 @@ public class Review {
 				+ ", metaData=" + metaData + "]";
 	}
 
-	public static class ReviewBuilder {
+	public static class Builder {
 		private String id;
 
 		private String userId;
@@ -289,97 +289,97 @@ public class Review {
 
 		private HashMap<String, String> metaData;
 
-		public ReviewBuilder() {
+		public Builder() {
 			super();
 			// TODO Auto-generated constructor stub
 		}
 
-		public ReviewBuilder id(String id) {
+		public Builder id(String id) {
 			this.id = id;
 			return this;
 		}
 
-		public ReviewBuilder userId(String userId) {
+		public Builder userId(String userId) {
 			this.userId = userId;
 			return this;
 		}
 
-		public ReviewBuilder text(String text) {
+		public Builder text(String text) {
 			this.text = text;
 			return this;
 		}
 
-		public ReviewBuilder branchId(String branchId) {
+		public Builder branchId(String branchId) {
 			this.branchId = branchId;
 			return this;
 		}
 
-		public ReviewBuilder branchName(String branchName) {
+		public Builder branchName(String branchName) {
 			this.branchName = branchName;
 			return this;
 		}
 
-		public ReviewBuilder orderType(String orderType) {
+		public Builder orderType(String orderType) {
 			this.orderType = orderType;
 			return this;
 		}
 
-		public ReviewBuilder dateCreated(Date dateCreated) {
+		public Builder dateCreated(Date dateCreated) {
 			this.dateCreated = dateCreated;
 			return this;
 		}
 
-		public ReviewBuilder dateModiefied(Date dateModiefied) {
+		public Builder dateModiefied(Date dateModiefied) {
 			this.dateModiefied = dateModiefied;
 			return this;
 		}
 
-		public ReviewBuilder rating(String rating) {
+		public Builder rating(String rating) {
 			this.rating = rating;
 			return this;
 		}
 
-		public ReviewBuilder votes(int votes) {
+		public Builder votes(int votes) {
 			this.votes = votes;
 			return this;
 		}
 
-		public ReviewBuilder reviewerName(String reviewerName) {
+		public Builder reviewerName(String reviewerName) {
 			this.reviewerName = reviewerName;
 			return this;
 		}
 
-		public ReviewBuilder reviewerEmail(String reviewerEmail) {
+		public Builder reviewerEmail(String reviewerEmail) {
 			this.reviewerEmail = reviewerEmail;
 			return this;
 		}
 
-		public ReviewBuilder city(String city) {
+		public Builder city(String city) {
 			this.city = city;
 			return this;
 		}
 
-		public ReviewBuilder state(String state) {
+		public Builder state(String state) {
 			this.state = state;
 			return this;
 		}
 
-		public ReviewBuilder country(String country) {
+		public Builder country(String country) {
 			this.country = country;
 			return this;
 		}
 
-		public ReviewBuilder metaData(HashMap<String, String> metaData) {
+		public Builder metaData(HashMap<String, String> metaData) {
 			this.metaData = metaData;
 			return this;
 		}
 
-		public ReviewBuilder sentiment(String sentiment) {
+		public Builder sentiment(String sentiment) {
 			this.sentiment = sentiment;
 			return this;
 		}
 
-		public ReviewBuilder polarity(double polarity) {
+		public Builder polarity(double polarity) {
 			this.polarity = polarity;
 			return this;
 		}

@@ -58,12 +58,14 @@ public class ReviewMessageHandler implements MessageHandler {
 			Review review = this.reviewPersistenceService.getReviewById(reviewId);
 			SentimentAnalysisResponse response;
 			if (SubscriptionTypes.SENTIMENT_ANALYSIS_BASIC.name().equals(jobMessage.getSubscriptionType()))
-				response = getResponmseFromSentimentAnalysisService(this.sentimentSeviceEndPointBasic, review.getText());
+				response = getResponseFromSentimentAnalysisService(this.sentimentSeviceEndPointBasic, review.getText());
 			else if (SubscriptionTypes.SENTIMENT_ANALYSIS_ADVANCED.name().equals(jobMessage.getSubscriptionType()))
-				response = getResponmseFromSentimentAnalysisService(this.sentimentServiceEndpointAdvance, review.getText());
+				response = getResponseFromSentimentAnalysisService(this.sentimentServiceEndpointAdvance, review.getText());
 			else
 				throw new ReviewServiceAsyncException(ErrorCode.NOT_ACCEPTABLE, "sunscriptionType not supported : " + jobMessage.getSubscriptionType());
-			this.reviewPersistenceService.updateReview(new Review.ReviewBuilder().id(reviewId).sentiment(response.getSentiment()).polarity(response.getPolarity()).build());
+			review.setPolarity(response.getPolarity());
+			review.setSentiment(response.getSentiment());
+			this.reviewPersistenceService.updateReview(review);
 
 		} catch (URISyntaxException | PersistenceServiceException e) {
 			throw new ReviewServiceAsyncException(e.getMessage(), e);
@@ -75,16 +77,16 @@ public class ReviewMessageHandler implements MessageHandler {
 		if (!jobMessage.getBody().containsKey("reviewId"))
 			throw new ReviewServiceAsyncException("message body must have reviewId");
 		String reviewId = jobMessage.getBody().get("reviewId");
-		if (StringUtils.isEmpty(reviewId))
-			throw new ReviewServiceAsyncException("reviewId in the message body can not be null/Empty");
+		if (StringUtils.isEmptyOrBlank(reviewId))
+			throw new ReviewServiceAsyncException("reviewId in the message body can not be null/Empty/blank");
 		if (!jobMessage.getBody().containsKey("userId"))
 			throw new ReviewServiceAsyncException("message body must have userId");
 		String userId = jobMessage.getBody().get("reviewId");
-		if (StringUtils.isEmpty(userId))
-			throw new ReviewServiceAsyncException("userId in the message body can not be null/Empty");
+		if (StringUtils.isEmptyOrBlank(userId))
+			throw new ReviewServiceAsyncException("userId in the message body can not be null/Empty/blank");
 	}
 
-	private SentimentAnalysisResponse getResponmseFromSentimentAnalysisService(String uriString, String text) throws URISyntaxException {
+	private SentimentAnalysisResponse getResponseFromSentimentAnalysisService(String uriString, String text) throws URISyntaxException {
 		URI uri = getURI(uriString);
 		Map<String, String> map = new HashMap<>();
 		map.put("text", text);

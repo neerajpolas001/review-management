@@ -1,15 +1,11 @@
 package com.reviewservice.persistence.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
-
-import com.reviewservice.businees.objects.Session;
-import com.reviewservice.utils.DateUtils;
-import com.reviewservice.utils.SessionUtils;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class TEst {
 
@@ -21,13 +17,10 @@ public class TEst {
 		 * Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT")); Date
 		 * date = calendar.getTime();
 		 */
-		
+
 //		Date date = DateUtils.getDateGMT();
 //		date = new Date(date.getTime() - 108000000);
 //		System.out.println(SessionUtils.validateSessionTimeout(new Session(null, null, date)));
-		
-		List<String> list = new ArrayList<>();
-		System.out.println(list.get(0));
-		
+
 	}
 }

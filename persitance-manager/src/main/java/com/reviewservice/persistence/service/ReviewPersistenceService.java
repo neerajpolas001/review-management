@@ -9,11 +9,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +41,6 @@ public class ReviewPersistenceService {
 	@Transactional // (readOnly = false, isolation = Isolation.READ_COMMITTED, propagation
 					// =Propagation.REQUIRED )
 	public Review saveReview(Review review) throws PersistenceServiceException {
-//		if (StringUtils.isEmpty(review.getUserId()))
-//			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "userId in review can not be null/empty");
-//		if (StringUtils.isEmpty(review.getText()))
-//			throw new PersistenceServiceException(ErrorCode.BAD_REQUEST, "text of the review can not null/empty");
 		DBReview dbReview = ReviewAdapter.convertToDBReview(review);
 		dbReview.setId(UID.getUUID());
 		Date date = DateUtils.getDateGMT();
@@ -70,8 +66,8 @@ public class ReviewPersistenceService {
 	}
 
 	public Review updateReview(Review review) throws PersistenceServiceException {
-		if (StringUtils.isEmpty(review.getId()))
-			throw new PersistenceServiceException("reviewId in review can not be null/empty");
+		if (StringUtils.isEmptyOrBlank(review.getId()))
+			throw new PersistenceServiceException("reviewId in review can not be null/empty/blank");
 		DBReview dbReview = ReviewAdapter.convertToDBReview(review);
 		DBReview dbReviewResponse = reviewRepository.save(dbReview);
 		List<DBReviewMetadata> dbReviewMetadatasList = new ArrayList<>();
@@ -115,6 +111,12 @@ public class ReviewPersistenceService {
 
 	private List<Review> convertToReviewList(List<DBReview> dbReviews) {
 		return dbReviews.stream().map(m -> ReviewAdapter.convertToReview(m, null)).collect(Collectors.toList());
+	}
+
+	public boolean checkIfExists(Review review) {
+		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withIgnorePaths("polarity", "votes");
+		Example<DBReview> example = Example.of(ReviewAdapter.convertToDBReview(review), matcher);
+		return this.reviewRepository.exists(example);
 	}
 
 }
